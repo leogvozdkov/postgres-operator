@@ -96,8 +96,15 @@ function get_master_pod {
 }
 
 CURRENT_NODENAME=$(get_current_pod | jq .items[].spec.nodeName --raw-output)
-export CURRENT_NODENAME
+CURRENT_CONTEINERS=$(get_current_pod | jq .items[].spec.containers[].name --raw-output)
 
+export CURRENT_NODENAME
+export CURRENT_CONTAINERS
+
+if [[ " ${CURRENT_CONTAINERS[*]} " == *" istio-proxy "* ]]; then
+    until curl -fsI http://localhost:15021/healthz/ready; do echo \"Waiting for Sidecar...\"; sleep 3; done;
+fi
+  
 for search in "${search_strategy[@]}"; do
 
     PGHOST=$(eval "$search")
