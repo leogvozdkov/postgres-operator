@@ -96,7 +96,7 @@ function get_master_pod {
 }
 
 CURRENT_NODENAME=$(get_current_pod | jq .items[].spec.nodeName --raw-output)
-CURRENT_CONTEINERS=$(get_current_pod | jq .items[].spec.containers[].name --raw-output)
+CURRENT_CONTAINERS=$(get_current_pod | jq .items[].spec.containers[].name --raw-output)
 
 export CURRENT_NODENAME
 export CURRENT_CONTAINERS
